@@ -1,0 +1,27 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job      count    min threads    max threads
+-----  -------  -------------  -------------
+all          1              1              1
+bbduk        2              1              1
+total        3              1              1
+
+Select jobs to execute...
+
+[Sun May 15 22:56:49 2022]
+Job 1:  --- Trimming  --- 
+
+[Sun May 15 22:56:49 2022]
+Error in rule bbduk:
+    jobid: 1
+    output: outputs/bbduk_1/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R1.trim.fastq, outputs/bbduk_1/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2.trim.fastq
+    shell:
+         bbduk.sh in1="data/samples/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R1_001.fastq data/samples/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R1_001.fastq" in2="data/samples/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2_001.fastq data/samples/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R2_001.fastq" out1="outputs/bbduk_1/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R1.trim.fastq" out2="outputs/bbduk_1/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2.trim.fastq"         ref="data/adapters.fa" ktrim=r k=23 mink=11 hdist=1 tpe tbo qtrim=r trimq=10 
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /home/egle/Desktop/SystemBiology/Transcriptomics/snake/collibri-snakemake/.snakemake/log/2022-05-15T225649.251061.snakemake.log

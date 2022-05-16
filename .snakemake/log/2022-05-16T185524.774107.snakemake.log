@@ -1,0 +1,37 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job            count    min threads    max threads
+-----------  -------  -------------  -------------
+all                1              1              1
+raw_fastqc         4              1              1
+raw_multiqc        4              1              1
+total              9              1              1
+
+Select jobs to execute...
+
+[Mon May 16 18:55:24 2022]
+rule raw_fastqc:
+    input: data/samples/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R1_001.fastq, data/samples/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2_001.fastq, data/samples/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R1_001.fastq, data/samples/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R2_001.fastq
+    output: outputs/fastqc_1/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R1_001_fastqc.html, outputs/fastqc_1/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R1_001_fastqc.zip
+    jobid: 6
+    wildcards: sample=KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R1_001
+    resources: tmpdir=/tmp
+
+[Mon May 16 18:55:37 2022]
+Finished job 6.
+1 of 9 steps (11%) done
+Select jobs to execute...
+
+[Mon May 16 18:55:37 2022]
+rule raw_fastqc:
+    input: data/samples/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R1_001.fastq, data/samples/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2_001.fastq, data/samples/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R1_001.fastq, data/samples/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R2_001.fastq
+    output: outputs/fastqc_1/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2_001_fastqc.html, outputs/fastqc_1/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2_001_fastqc.zip
+    jobid: 4
+    wildcards: sample=Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2_001
+    resources: tmpdir=/tmp
+
+Warning: the following output files of rule raw_fastqc were not present when the DAG was created:
+{'outputs/fastqc_1/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2_001_fastqc.html', 'outputs/fastqc_1/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2_001_fastqc.zip'}

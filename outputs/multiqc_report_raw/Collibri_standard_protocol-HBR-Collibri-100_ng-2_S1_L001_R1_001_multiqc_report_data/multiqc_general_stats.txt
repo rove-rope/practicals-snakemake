@@ -1,0 +1,2 @@
+Sample	FastQC_mqc-generalstats-fastqc-percent_duplicates	FastQC_mqc-generalstats-fastqc-percent_gc	FastQC_mqc-generalstats-fastqc-avg_sequence_length	FastQC_mqc-generalstats-fastqc-percent_fails	FastQC_mqc-generalstats-fastqc-total_sequences
+Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R1_001	63.64703310359111	62.0	151.0	18.181818181818183	86909.0

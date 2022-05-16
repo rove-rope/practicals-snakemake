@@ -1,0 +1,5 @@
+Sample	FastQC_mqc-generalstats-fastqc-percent_duplicates	FastQC_mqc-generalstats-fastqc-percent_gc	FastQC_mqc-generalstats-fastqc-avg_sequence_length	FastQC_mqc-generalstats-fastqc-percent_fails	FastQC_mqc-generalstats-fastqc-total_sequences
+Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R1_001	63.57569411683485	63.0	144.61036256314077	18.181818181818183	86909.0
+Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2_001	61.435524514146984	62.0	144.57801838704853	27.27272727272727	86909.0
+KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R1_001	60.761621597887384	61.0	144.27339844313556	18.181818181818183	159423.0
+KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R2_001	61.02256261643552	61.0	144.39370103435513	18.181818181818183	159423.0

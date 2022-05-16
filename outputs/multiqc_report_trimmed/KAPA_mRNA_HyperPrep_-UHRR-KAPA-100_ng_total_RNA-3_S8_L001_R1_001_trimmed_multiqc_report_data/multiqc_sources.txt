@@ -1,0 +1,5 @@
+Module	Section	Sample Name	Source
+FastQC	all_sections	KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R1_001	/home/egle/Desktop/SystemBiology/Transcriptomics/snake/collibri-snakemake/outputs/fastqc_trimmed/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R1_001_trimmed_fastqc.zip
+FastQC	all_sections	KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R2_001	/home/egle/Desktop/SystemBiology/Transcriptomics/snake/collibri-snakemake/outputs/fastqc_trimmed/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R2_001_trimmed_fastqc.zip
+FastQC	all_sections	Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2_001	/home/egle/Desktop/SystemBiology/Transcriptomics/snake/collibri-snakemake/outputs/fastqc_trimmed/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2_001_trimmed_fastqc.zip
+FastQC	all_sections	Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R1_001	/home/egle/Desktop/SystemBiology/Transcriptomics/snake/collibri-snakemake/outputs/fastqc_trimmed/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R1_001_trimmed_fastqc.zip

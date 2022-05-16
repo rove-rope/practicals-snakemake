@@ -1,0 +1,60 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job            count    min threads    max threads
+-----------  -------  -------------  -------------
+all                1              1              1
+raw_fastqc         2              1              1
+raw_multiqc        4              1              1
+trim               4              1              1
+total             11              1              1
+
+Select jobs to execute...
+
+[Sun May 15 21:52:06 2022]
+rule raw_fastqc:
+    input: data/samples/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R1_001.fastq, data/samples/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2_001.fastq, data/samples/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R1_001.fastq, data/samples/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R2_001.fastq
+    output: outputs/fastqc_1/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R2_001_fastqc.html, outputs/fastqc_1/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R2_001_fastqc.zip
+    jobid: 6
+    wildcards: sample=KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R2_001
+    resources: tmpdir=/tmp
+
+[Sun May 15 21:52:19 2022]
+Finished job 6.
+1 of 11 steps (9%) done
+Select jobs to execute...
+
+[Sun May 15 21:52:19 2022]
+rule raw_fastqc:
+    input: data/samples/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R1_001.fastq, data/samples/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2_001.fastq, data/samples/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R1_001.fastq, data/samples/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R2_001.fastq
+    output: outputs/fastqc_1/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R1_001_fastqc.html, outputs/fastqc_1/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R1_001_fastqc.zip
+    jobid: 5
+    wildcards: sample=KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R1_001
+    resources: tmpdir=/tmp
+
+Warning: the following output files of rule raw_fastqc were not present when the DAG was created:
+{'outputs/fastqc_1/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R1_001_fastqc.html', 'outputs/fastqc_1/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R1_001_fastqc.zip'}
+[Sun May 15 21:52:32 2022]
+Finished job 5.
+2 of 11 steps (18%) done
+Select jobs to execute...
+
+[Sun May 15 21:52:32 2022]
+rule raw_multiqc:
+    input: outputs/fastqc_1/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R1_001_fastqc.html, outputs/fastqc_1/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2_001_fastqc.html, outputs/fastqc_1/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R1_001_fastqc.html, outputs/fastqc_1/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R2_001_fastqc.html, outputs/fastqc_1/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R1_001_fastqc.zip, outputs/fastqc_1/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2_001_fastqc.zip, outputs/fastqc_1/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R1_001_fastqc.zip, outputs/fastqc_1/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R2_001_fastqc.zip
+    output: outputs/multiqc_report_1/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2_001_multiqc_report_1.html
+    jobid: 7
+    wildcards: sample=Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2_001
+    resources: tmpdir=/tmp
+
+Waiting at most 5 seconds for missing files.
+MissingOutputException in line 16 of /home/egle/Desktop/SystemBiology/Transcriptomics/snake/collibri-snakemake/Snakefile:
+Job Missing files after 5 seconds:
+outputs/multiqc_report_1/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2_001_multiqc_report_1.html
+This might be due to filesystem latency. If that is the case, consider to increase the wait time with --latency-wait.
+Job id: 7 completed successfully, but some output files are missing. 7
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /home/egle/Desktop/SystemBiology/Transcriptomics/snake/collibri-snakemake/.snakemake/log/2022-05-15T215205.806572.snakemake.log
