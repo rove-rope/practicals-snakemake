@@ -87,6 +87,7 @@ rule feature_counts:
         gtf="data/chr19_20Mb.gtf"
     output:
         out1="outputs/STAR/{samplename}/counts_1.txt",
-        out2="outputs/STAR/{samplename}/counts_2.txt"
+        out2="outputs/STAR/{samplename}/counts_2.txt",
+        sorted="outputs/STAR/{samplename}/Aligned.sortedByCoord.out.sortedbyname.bam"
     shell:
-        "featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out1} {input.bam} -s 1 && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out2} {input.bam} -s 2"
+        "samtools sort -n -o {output.sorted} {input.bam} && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out1} -s 1 {output.sorted} && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out2} -s 2 {output.sorted}"
