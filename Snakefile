@@ -4,7 +4,7 @@ rule all:
     input:
         expand("outputs/multiqc_report_trimmed/{sample}_trimmed_multiqc_report.html", sample=config["samples"]),
         expand("outputs/multiqc_report_raw/{sample}_multiqc_report.html", sample=config["samples"]),
-        "outputs/STAR/chr19_20Mb/Genome"
+        expand("outputs/STAR/{samplename}/Aligned.sortedByCoord.out.bam", samplename=config["samplename"])
         
 rule raw_fastqc:
     input:
@@ -57,6 +57,17 @@ rule star_indices:
         fa="data/chr19_20Mb.fa",
         gtf="data/chr19_20Mb.gtf"
     output:
-        "outputs/STAR/chr19_20Mb/Genome"
+        "outputs/STAR/chr19_20Mb/Genome",
+        directory("outputs/STAR/chr19_20Mb/")
     shell:
         "mkdir -p ./outputs/STAR/chr19_20Mb && STAR --runThreadN 1 --runMode genomeGenerate --genomeDir outputs/STAR/chr19_20Mb/ --genomeFastaFiles {input.fa} --sjdbGTFfile {input.gtf} --genomeSAindexNbases 11"
+
+rule star_map:
+    input:
+        gendir="outputs/STAR/chr19_20Mb/",
+        read1="outputs/trimmed_reads/{samplename}1_001_trimmed.fastq",
+        read2="outputs/trimmed_reads/{samplename}2_001_trimmed.fastq"
+    output:
+        "outputs/STAR/{samplename}/Aligned.sortedByCoord.out.bam"
+    shell:
+        "mkdir -p outputs/STAR/{wildcards.samplename} && STAR --runThreadN 1 --genomeDir {input.gendir} --readFilesIn {input.read1} {input.read2} --outSAMtype BAM SortedByCoordinate --outFileNamePrefix outputs/STAR/{wildcards.samplename}/"
