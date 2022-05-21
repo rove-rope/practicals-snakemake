@@ -4,7 +4,7 @@ rule all:
     input:
         expand("outputs/multiqc_report_trimmed/{sample}_trimmed_multiqc_report.html", sample=config["samples"]),
         expand("outputs/multiqc_report_raw/{sample}_multiqc_report.html", sample=config["samples"]),
-        expand("outputs/STAR/{samplename}/Aligned.sortedByCoord.out.bam", samplename=config["samplename"])
+        expand("outputs/STAR/{samplename}/Aligned.sortedByCoord.out.bam.bai", samplename=config["samplename"])
         
 rule raw_fastqc:
     input:
@@ -71,3 +71,11 @@ rule star_map:
         "outputs/STAR/{samplename}/Aligned.sortedByCoord.out.bam"
     shell:
         "mkdir -p outputs/STAR/{wildcards.samplename} && STAR --runThreadN 1 --genomeDir {input.gendir} --readFilesIn {input.read1} {input.read2} --outSAMtype BAM SortedByCoordinate --outFileNamePrefix outputs/STAR/{wildcards.samplename}/"
+        
+rule bam_index:
+    input:
+        "outputs/STAR/{samplename}/Aligned.sortedByCoord.out.bam"
+    output:
+        "outputs/STAR/{samplename}/Aligned.sortedByCoord.out.bam.bai"
+    shell:
+        "samtools index {input}"
