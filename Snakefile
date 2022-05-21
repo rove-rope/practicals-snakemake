@@ -3,8 +3,8 @@ configfile: "config.yaml"
 rule all:
     input:
         expand("outputs/multiqc_report_trimmed/{sample}_trimmed_multiqc_report.html", sample=config["samples"]),
-#        expand("outputs/trimmed_reads/{samplename}1_001_trimmed.fastq", samplename=config["samplename"]),
-#        expand("outputs/trimmed_reads/{samplename}2_001_trimmed.fastq", samplename=config["samplename"])
+        expand("outputs/multiqc_report_raw/{sample}_multiqc_report.html", sample=config["samples"]),
+        "outputs/STAR/chr19_20Mb/Genome"
         
 rule raw_fastqc:
     input:
@@ -26,9 +26,8 @@ rule raw_multiqc:
 
 rule trim_bbduk:
     input:
-        previous="outputs/multiqc_report_raw/{sample}_multiqc_report.html",
         read="data/samples/{sample}.fastq",
-        adapters="./data/adapters.fa"
+        adapters="data/adapters.fa"
     output:
         out="outputs/trimmed_reads/{sample}_trimmed.fastq"
     shell:
@@ -52,3 +51,12 @@ rule trimmed_multiqc:
         "outputs/multiqc_report_trimmed/{sample}_trimmed_multiqc_report.html"
     shell:
         "multiqc ./outputs/fastqc_trimmed/ -n {output}"
+        
+rule star_indices:
+    input:
+        fa="data/chr19_20Mb.fa",
+        gtf="data/chr19_20Mb.gtf"
+    output:
+        "outputs/STAR/chr19_20Mb/Genome"
+    shell:
+        "mkdir -p ./outputs/STAR/chr19_20Mb && STAR --runThreadN 1 --runMode genomeGenerate --genomeDir outputs/STAR/chr19_20Mb/ --genomeFastaFiles {input.fa} --sjdbGTFfile {input.gtf} --genomeSAindexNbases 11"
