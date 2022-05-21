@@ -2,54 +2,59 @@ configfile: "config.yaml"
 
 rule all:
     input:
-        expand("outputs/multiqc_report_trimmed/{sample}_trimmed_multiqc_report.html", sample=config["samples"]),
-        expand("outputs/multiqc_report_raw/{sample}_multiqc_report.html", sample=config["samples"]),
-        expand("outputs/STAR/{samplename}/Aligned.sortedByCoord.out.bam.bai", samplename=config["samplename"]),
-        expand("outputs/STAR/{samplename}/counts_2.txt", samplename=config["samplename"])
+        expand("outputs/multiqc_report_trimmed/{filename}{num}_001_trimmed_multiqc_report.html", filename=config["method"]["collibri"], num=config["num"]),
+        expand("outputs/multiqc_report_raw/{filename}{num}_001_multiqc_report.html", filename=config["method"]["collibri"], num=config["num"]),
+        expand("outputs/STAR/{filename}/Aligned.sortedByCoord.out.bam.bai", filename=config["method"]["collibri"]),
+        expand("outputs/STAR/{filename}/counts_2.txt", filename=config["method"]["collibri"]),
+        expand("outputs/multiqc_report_trimmed/{filename}{num}_001_trimmed_multiqc_report.html", filename=config["method"]["kapa"], num=config["num"]),
+        expand("outputs/multiqc_report_raw/{filename}{num}_001_multiqc_report.html", filename=config["method"]["kapa"], num=config["num"]),
+        expand("outputs/STAR/{filename}/Aligned.sortedByCoord.out.bam.bai", filename=config["method"]["kapa"]),
+        expand("outputs/STAR/{filename}/counts_2.txt", filename=config["method"]["kapa"]),
+#        expand("outputs/STAR/{type}/counts_2.txt", type=config["method"])
         
 rule raw_fastqc:
     input:
-        "data/samples/{sample}.fastq"
+        "data/samples/{filename}{num}_001.fastq"
     output:
-        "outputs/fastqc_raw/{sample}_fastqc.html",
-        "outputs/fastqc_raw/{sample}_fastqc.zip"
+        "outputs/fastqc_raw/{filename}{num}_001_fastqc.html",
+        "outputs/fastqc_raw/{filename}{num}_001_fastqc.zip"
     shell:
         "fastqc {input} -o outputs/fastqc_raw/"
 
 rule raw_multiqc:
     input:
-        "outputs/fastqc_raw/{sample}_fastqc.html",
-        "outputs/fastqc_raw/{sample}_fastqc.zip"
+        "outputs/fastqc_raw/{filename}{num}_001_fastqc.html",
+        "outputs/fastqc_raw/{filename}{num}_001_fastqc.zip"
     output:
-        "outputs/multiqc_report_raw/{sample}_multiqc_report.html"
+        "outputs/multiqc_report_raw/{filename}{num}_001_multiqc_report.html"
     shell:
         "multiqc ./outputs/fastqc_raw/ -n {output}"
 
 rule trim_bbduk:
     input:
-        read="data/samples/{sample}.fastq",
+        read="data/samples/{filename}{num}_001.fastq",
         adapters="data/adapters.fa"
     output:
-        out="outputs/trimmed_reads/{sample}_trimmed.fastq"
+        out="outputs/trimmed_reads/{filename}{num}_001_trimmed.fastq"
     shell:
         "./bin/bbmap/bbduk.sh in={input.read} out={output.out} ref={input.adapters} ktrim=r k=23 mink=11 hdist=1 tpe tbo qtrim=r trimq=10"
 
         
 rule trimmed_fastqc:
     input:
-        "outputs/trimmed_reads/{sample}_trimmed.fastq"
+        "outputs/trimmed_reads/{filename}{num}_001_trimmed.fastq"
     output:
-        "outputs/fastqc_trimmed/{sample}_trimmed_fastqc.html",
-        "outputs/fastqc_trimmed/{sample}_trimmed_fastqc.zip"
+        "outputs/fastqc_trimmed/{filename}{num}_001_trimmed_fastqc.html",
+        "outputs/fastqc_trimmed/{filename}{num}_001_trimmed_fastqc.zip"
     shell:
         "fastqc {input} -o outputs/fastqc_trimmed/"
 
 rule trimmed_multiqc:
     input:
-        "outputs/fastqc_trimmed/{sample}_trimmed_fastqc.html",
-        "outputs/fastqc_trimmed/{sample}_trimmed_fastqc.zip"
+        "outputs/fastqc_trimmed/{filename}{num}_001_trimmed_fastqc.html",
+        "outputs/fastqc_trimmed/{filename}{num}_001_trimmed_fastqc.zip"
     output:
-        "outputs/multiqc_report_trimmed/{sample}_trimmed_multiqc_report.html"
+        "outputs/multiqc_report_trimmed/{filename}{num}_001_trimmed_multiqc_report.html"
     shell:
         "multiqc ./outputs/fastqc_trimmed/ -n {output}"
         
@@ -66,28 +71,45 @@ rule star_indices:
 rule star_map:
     input:
         gendir="outputs/STAR/chr19_20Mb/",
-        read1="outputs/trimmed_reads/{samplename}1_001_trimmed.fastq",
-        read2="outputs/trimmed_reads/{samplename}2_001_trimmed.fastq"
+        read1="outputs/trimmed_reads/{filename}1_001_trimmed.fastq",
+        read2="outputs/trimmed_reads/{filename}2_001_trimmed.fastq"
     output:
-        "outputs/STAR/{samplename}/Aligned.sortedByCoord.out.bam"
+        "outputs/STAR/{filename}/Aligned.sortedByCoord.out.bam"
     shell:
-        "mkdir -p outputs/STAR/{wildcards.samplename} && STAR --runThreadN 1 --genomeDir {input.gendir} --readFilesIn {input.read1} {input.read2} --outSAMtype BAM SortedByCoordinate --outFileNamePrefix outputs/STAR/{wildcards.samplename}/"
+        "mkdir -p outputs/STAR/{wildcards.filename} && STAR --runThreadN 1 --genomeDir {input.gendir} --readFilesIn {input.read1} {input.read2} --outSAMtype BAM SortedByCoordinate --outFileNamePrefix outputs/STAR/{wildcards.filename}/"
         
 rule bam_index:
     input:
-        "outputs/STAR/{samplename}/Aligned.sortedByCoord.out.bam"
+        "outputs/STAR/{filename}/Aligned.sortedByCoord.out.bam"
     output:
-        "outputs/STAR/{samplename}/Aligned.sortedByCoord.out.bam.bai"
+        "outputs/STAR/{filename}/Aligned.sortedByCoord.out.bam.bai"
     shell:
         "samtools index {input}"
+        
+rule bam_sort_name:
+    input:
+        "outputs/STAR/{filename}/Aligned.sortedByCoord.out.bam"
+    output:
+        "outputs/STAR/{filename}/Aligned.sortedByCoord.out.sortedbyname.bam"
+    shell:
+        "samtools sort -n -o {output} {input}"
 
 rule feature_counts:
     input:
-        bam="outputs/STAR/{samplename}/Aligned.sortedByCoord.out.bam",
+        bam="outputs/STAR/{filename}/Aligned.sortedByCoord.out.sortedbyname.bam",
         gtf="data/chr19_20Mb.gtf"
     output:
-        out1="outputs/STAR/{samplename}/counts_1.txt",
-        out2="outputs/STAR/{samplename}/counts_2.txt",
-        sorted="outputs/STAR/{samplename}/Aligned.sortedByCoord.out.sortedbyname.bam"
+        out1="outputs/STAR/{filename}/counts_1.txt",
+        out2="outputs/STAR/{filename}/counts_2.txt"
     shell:
-        "samtools sort -n -o {output.sorted} {input.bam} && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out1} -s 1 {output.sorted} && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out2} -s 2 {output.sorted}"
+        "featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out1} -s 1 {input.bam} && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out2} -s 2 {input.bam}"
+
+#rule feature_counts_per_sample:
+#    input:
+#        bam=expand("outputs/STAR/{name}/Aligned.sortedByCoord.out.sortedbyname.bam", name=config["method"][{type}]),
+#        gtf="data/chr19_20Mb.gtf"
+#    output:
+#        out1="outputs/STAR/{type}/counts_1.txt",
+#        out2="outputs/STAR/{type}/counts_2.txt"
+#    shell:
+#        "mkdir -p outputs/STAR/{type}/ && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out1} -s 1 {input.bam} && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out2} -s 2 {input.bam}"
