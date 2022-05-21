@@ -4,7 +4,8 @@ rule all:
     input:
         expand("outputs/multiqc_report_trimmed/{sample}_trimmed_multiqc_report.html", sample=config["samples"]),
         expand("outputs/multiqc_report_raw/{sample}_multiqc_report.html", sample=config["samples"]),
-        expand("outputs/STAR/{samplename}/Aligned.sortedByCoord.out.bam.bai", samplename=config["samplename"])
+        expand("outputs/STAR/{samplename}/Aligned.sortedByCoord.out.bam.bai", samplename=config["samplename"]),
+        expand("outputs/STAR/{samplename}/counts_2.txt", samplename=config["samplename"])
         
 rule raw_fastqc:
     input:
@@ -79,3 +80,13 @@ rule bam_index:
         "outputs/STAR/{samplename}/Aligned.sortedByCoord.out.bam.bai"
     shell:
         "samtools index {input}"
+
+rule feature_counts:
+    input:
+        bam="outputs/STAR/{samplename}/Aligned.sortedByCoord.out.bam",
+        gtf="data/chr19_20Mb.gtf"
+    output:
+        out1="outputs/STAR/{samplename}/counts_1.txt",
+        out2="outputs/STAR/{samplename}/counts_2.txt"
+    shell:
+        "featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out1} {input.bam} -s 1 && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out2} {input.bam} -s 2"
