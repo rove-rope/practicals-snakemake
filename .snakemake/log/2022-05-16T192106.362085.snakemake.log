@@ -1,4 +1,0 @@
-Building DAG of jobs...
-MissingInputException in line 39 of /home/egle/Desktop/SystemBiology/Transcriptomics/snake/collibri-snakemake/Snakefile:
-Missing input files for rule trimmed_fastqc:
-outputs/trimmed_reads/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R1_001_trimmed_trimmed.fastq

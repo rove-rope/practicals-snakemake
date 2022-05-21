@@ -1,7 +1,0 @@
-Building DAG of jobs...
-MissingInputException in line 3 of /home/egle/Desktop/SystemBiology/Transcriptomics/snake/collibri-snakemake/Snakefile:
-Missing input files for rule all:
-outputs/multiqc_report_1/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R1_001_multiqc_report_1.fa
-outputs/multiqc_report_1/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R1_001_multiqc_report_1.fa
-outputs/multiqc_report_1/Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R2_001_multiqc_report_1.fa
-outputs/multiqc_report_1/KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R2_001_multiqc_report_1.fa
