@@ -1,3 +1,4 @@
 outputs/*
 .snakemake/*
 Log.out
+!outputs/README.txt
