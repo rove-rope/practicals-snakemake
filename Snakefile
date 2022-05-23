@@ -6,7 +6,7 @@ rule all:
         expand("outputs/multiqc_report_trimmed/{filename}{num}_001_trimmed_multiqc_report.html", filename=[filename for method in config["method"].keys() for filename in config["method"][method]], num=config["num"]),
         expand("outputs/STAR/{filename}/Aligned.sortedByCoord.out.bam.bai", filename=[filename for method in config["method"].keys() for filename in config["method"][method]]),
         expand("outputs/STAR/{filename}/counts_2.txt", filename=[filename for method in config["method"].keys() for filename in config["method"][method]]),
-#        expand("outputs/STAR/{mtype}/counts_2.txt", mtype=config["method"])
+        [f"outputs/STAR/all/{x}/counts_2.txt" for x in config["method"]]
         
 rule raw_fastqc:
     input:
@@ -100,12 +100,14 @@ rule feature_counts:
     shell:
         "featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out1} -s 1 {input.bam} && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out2} -s 2 {input.bam}"
 
-#rule feature_counts_per_sample:
-#    input:
-#        [f"outputs/STAR/{name}/Aligned.sortedByCoord.out.sortedbyname.bam" for name in config["method"][{mtype}]],
-#        gtf="data/chr19_20Mb.gtf"
-#    output:
-#        out1="outputs/STAR/{mtype}/counts_1.txt",
-#        out2="outputs/STAR/{mtype}/counts_2.txt"
-#    shell:
-#        "mkdir -p outputs/STAR/{wildcards.mtype}/ && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out1} -s 1 {input.bam} && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out2} -s 2 {input.bam}"
+
+
+rule feature_counts_per_sample:
+    input:
+        bam=lambda wildcards: [f"outputs/STAR/{name}/Aligned.sortedByCoord.out.sortedbyname.bam" for name in config["method"][wildcards.x]],
+        gtf="data/chr19_20Mb.gtf"
+    output:
+        outA="outputs/STAR/all/{x}/counts_1.txt",
+        outB="outputs/STAR/all/{x}/counts_2.txt"
+    shell:
+        "mkdir -p outputs/STAR/all/{wildcards.x}/ && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.outA} -s 1 {input.bam} && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.outB} -s 2 {input.bam}"
