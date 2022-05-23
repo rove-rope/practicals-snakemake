@@ -2,15 +2,11 @@ configfile: "config.yaml"
 
 rule all:
     input:
-        expand("outputs/multiqc_report_trimmed/{filename}{num}_001_trimmed_multiqc_report.html", filename=config["method"]["collibri"], num=config["num"]),
-        expand("outputs/multiqc_report_raw/{filename}{num}_001_multiqc_report.html", filename=config["method"]["collibri"], num=config["num"]),
-        expand("outputs/STAR/{filename}/Aligned.sortedByCoord.out.bam.bai", filename=config["method"]["collibri"]),
-        expand("outputs/STAR/{filename}/counts_2.txt", filename=config["method"]["collibri"]),
-        expand("outputs/multiqc_report_trimmed/{filename}{num}_001_trimmed_multiqc_report.html", filename=config["method"]["kapa"], num=config["num"]),
-        expand("outputs/multiqc_report_raw/{filename}{num}_001_multiqc_report.html", filename=config["method"]["kapa"], num=config["num"]),
-        expand("outputs/STAR/{filename}/Aligned.sortedByCoord.out.bam.bai", filename=config["method"]["kapa"]),
-        expand("outputs/STAR/{filename}/counts_2.txt", filename=config["method"]["kapa"]),
-#        expand("outputs/STAR/{type}/counts_2.txt", type=config["method"])
+        expand("outputs/multiqc_report_raw/{filename}{num}_001_multiqc_report.html", filename=[filename for method in config["method"].keys() for filename in config["method"][method]], num=config["num"]),
+        expand("outputs/multiqc_report_trimmed/{filename}{num}_001_trimmed_multiqc_report.html", filename=[filename for method in config["method"].keys() for filename in config["method"][method]], num=config["num"]),
+        expand("outputs/STAR/{filename}/Aligned.sortedByCoord.out.bam.bai", filename=[filename for method in config["method"].keys() for filename in config["method"][method]]),
+        expand("outputs/STAR/{filename}/counts_2.txt", filename=[filename for method in config["method"].keys() for filename in config["method"][method]]),
+#        expand("outputs/STAR/{mtype}/counts_2.txt", mtype=config["method"])
         
 rule raw_fastqc:
     input:
@@ -106,10 +102,10 @@ rule feature_counts:
 
 #rule feature_counts_per_sample:
 #    input:
-#        bam=expand("outputs/STAR/{name}/Aligned.sortedByCoord.out.sortedbyname.bam", name=config["method"][{type}]),
+#        [f"outputs/STAR/{name}/Aligned.sortedByCoord.out.sortedbyname.bam" for name in config["method"][{mtype}]],
 #        gtf="data/chr19_20Mb.gtf"
 #    output:
-#        out1="outputs/STAR/{type}/counts_1.txt",
-#        out2="outputs/STAR/{type}/counts_2.txt"
+#        out1="outputs/STAR/{mtype}/counts_1.txt",
+#        out2="outputs/STAR/{mtype}/counts_2.txt"
 #    shell:
-#        "mkdir -p outputs/STAR/{type}/ && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out1} -s 1 {input.bam} && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out2} -s 2 {input.bam}"
+#        "mkdir -p outputs/STAR/{wildcards.mtype}/ && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out1} -s 1 {input.bam} && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out2} -s 2 {input.bam}"
