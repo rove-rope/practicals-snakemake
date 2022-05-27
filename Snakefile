@@ -2,11 +2,11 @@ configfile: "config.yaml"
 
 rule all:
     input:
-        expand("outputs/multiqc_report_raw/{filename}{num}_001_multiqc_report.html", filename=[filename for method in config["method"].keys() for filename in config["method"][method]], num=config["num"]),
-        expand("outputs/multiqc_report_trimmed/{filename}{num}_001_trimmed_multiqc_report.html", filename=[filename for method in config["method"].keys() for filename in config["method"][method]], num=config["num"]),
-        expand("outputs/STAR/{filename}/Aligned.sortedByCoord.out.bam.bai", filename=[filename for method in config["method"].keys() for filename in config["method"][method]]),
-        expand("outputs/STAR/{filename}/counts_2.txt", filename=[filename for method in config["method"].keys() for filename in config["method"][method]]),
-        [f"outputs/STAR/all/{x}/counts_2.txt" for x in config["method"]]
+        expand("outputs/multiqc_report_raw/{filename}{num}_001_multiqc_report.html", filename=[filename for method in config["method"].keys() for filename in config["method"][method]["files"]], num=config["num"]),
+        expand("outputs/multiqc_report_trimmed/{filename}{num}_001_trimmed_multiqc_report.html", filename=[filename for method in config["method"].keys() for filename in config["method"][method]["files"]], num=config["num"]),
+        expand("outputs/STAR/{filename}/Aligned.sortedByCoord.out.bam.bai", filename=[filename for method in config["method"].keys() for filename in config["method"][method]["files"]]),
+        expand("outputs/STAR/{filename}/counts_2.txt", filename=[filename for method in config["method"].keys() for filename in config["method"][method]["files"]]),
+        [f"outputs/STAR/all/{x}/counts.txt" for x in config["method"]]
         
 rule raw_fastqc:
     input:
@@ -104,10 +104,11 @@ rule feature_counts:
 
 rule feature_counts_per_sample:
     input:
-        bam=lambda wildcards: [f"outputs/STAR/{name}/Aligned.sortedByCoord.out.sortedbyname.bam" for name in config["method"][wildcards.x]],
+        bam=lambda wildcards: [f"outputs/STAR/{name}/Aligned.sortedByCoord.out.sortedbyname.bam" for name in config["method"][wildcards.x]["files"]],
         gtf="data/chr19_20Mb.gtf"
+    params:
+        s=lambda wildcards: [x for x in config["method"][wildcards.x]["s"]],
     output:
-        outA="outputs/STAR/all/{x}/counts_1.txt",
-        outB="outputs/STAR/all/{x}/counts_2.txt"
+        outA="outputs/STAR/all/{x}/counts.txt"
     shell:
-        "mkdir -p outputs/STAR/all/{wildcards.x}/ && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.outA} -s 1 {input.bam} && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.outB} -s 2 {input.bam}"
+        "mkdir -p outputs/STAR/all/{wildcards.x}/ && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.outA} -s {params.s} {input.bam}"

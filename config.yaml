@@ -1,14 +1,20 @@
 method:
     Collibri:
-        - Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R
-        - Collibri_standard_protocol-HBR-Collibri-100_ng-3_S2_L001_R
-        - Collibri_standard_protocol-UHRR-Collibri-100_ng-2_S3_L001_R
-        - Collibri_standard_protocol-UHRR-Collibri-100_ng-3_S4_L001_R
+        files:
+            - Collibri_standard_protocol-HBR-Collibri-100_ng-2_S1_L001_R
+            - Collibri_standard_protocol-HBR-Collibri-100_ng-3_S2_L001_R
+            - Collibri_standard_protocol-UHRR-Collibri-100_ng-2_S3_L001_R
+            - Collibri_standard_protocol-UHRR-Collibri-100_ng-3_S4_L001_R
+        s: 
+            - 1
     KAPA:
-        - KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R
-        - KAPA_mRNA_HyperPrep_-HBR-KAPA-100_ng_total_RNA-2_S5_L001_R
-        - KAPA_mRNA_HyperPrep_-HBR-KAPA-100_ng_total_RNA-3_S6_L001_R
-        - KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-2_S7_L001_R
+        files:
+            - KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-3_S8_L001_R
+            - KAPA_mRNA_HyperPrep_-HBR-KAPA-100_ng_total_RNA-2_S5_L001_R
+            - KAPA_mRNA_HyperPrep_-HBR-KAPA-100_ng_total_RNA-3_S6_L001_R
+            - KAPA_mRNA_HyperPrep_-UHRR-KAPA-100_ng_total_RNA-2_S7_L001_R
+        s: 
+            - 2
 
 num:
     - 1
