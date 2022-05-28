@@ -16,6 +16,8 @@ parser <- add_option(parser, c( "-v", "--output-vulcano" ), action = "store",
 options = parse_args(parser, positional_arguments = TRUE)
 
 #setwd("/home/egle/Desktop/SystemBiology/Transcriptomics/snake/collibri-snakemake/outputs/STAR/all/Collibri")
+#data = read.csv('counts.txt', header=TRUE, sep="\t", skip=1, 
+#                row.names = "Geneid")
 data = read.csv(options$options$input_filename, header=TRUE, sep="\t", skip=1, 
                 row.names = "Geneid")
 cts = as.matrix(data[,-c(1,2,3,4,5)])
@@ -83,6 +85,8 @@ summary(resLFC)
 #  --  a listof DE genes wit Padj values. -> chose to output all result data.
 # DE_genes_with_Padj_values = subset(res, select = c("padj") )
 # DE_genes_with_Padj_values
+resLFC = resLFC[order(resLFC$padj),]
+
 write.csv(resLFC,options$options$de_filename, row.names = TRUE)
 
 #  --  Vulcanplot.
@@ -108,3 +112,5 @@ selected = abs(resLFC$log2FoldChange) > 2.5 & resLFC$padj < a
 text(resLFC$log2FoldChange[selected], -log10(resLFC$padj)[selected], 
      lab=rownames(resLFC)[selected], cex=0.4)
 dev.off()
+
+
