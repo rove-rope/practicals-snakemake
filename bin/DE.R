@@ -39,6 +39,11 @@ colnames(cts) = samples
 coldata = data.frame(condition, row.names = samples)
 coldata$condition = factor(coldata$condition)
 
+cts_file = gsub("/([A-Z]*[a-z]*)*\\.[a-z]*$", "/cts.csv", options$options$de_filename)
+write.csv(cts,cts_file, row.names = TRUE)
+coldata_file = gsub("cts.csv$", "coldata.csv", cts_file)
+write.csv(coldata,coldata_file, row.names = TRUE)
+
 # Make sure that sample names match in counts and column datatables:
 if (! all(rownames(coldata) == colnames(cts))){
   cts = cts[, rownames(coldata)]

@@ -7,7 +7,8 @@ rule all:
         expand("outputs/multiqc_report_trimmed/{filename}{num}_001_trimmed_multiqc_report.html", filename=[filename for method in config["method"].keys() for filename in config["method"][method]["files"]], num=config["num"]),
         expand("outputs/STAR/{filename}/Aligned.sortedByCoord.out.bam.bai", filename=[filename for method in config["method"].keys() for filename in config["method"][method]["files"]]),
         expand("outputs/STAR/{filename}/counts_2.txt", filename=[filename for method in config["method"].keys() for filename in config["method"][method]["files"]]),
-        [f"outputs/STAR/all/{x}/vulcano-plot.eps" for x in config["method"]]
+        [f"outputs/STAR/all/{x}/vulcano-plot.eps" for x in config["method"]],
+        "outputs/STAR/all/pca-plot.eps"
         
 rule raw_fastqc:
     input:
@@ -120,6 +121,16 @@ rule de_analysis:
         counts = "outputs/STAR/all/{x}/counts.txt"
     output:
         plot="outputs/STAR/all/{x}/vulcano-plot.eps",
-        pval="outputs/STAR/all/{x}/DE.csv"
+        pval="outputs/STAR/all/{x}/DE.csv",
+        cts="outputs/STAR/all/{x}/cts.csv",
+        coldata="outputs/STAR/all/{x}/coldata.csv"
     shell:
         "./bin/DE.R -i {input.counts} -o {output.pval} -v {output.plot}"
+
+rule pca_plot:
+    input:
+        expand("outputs/STAR/all/{x}/cts.csv", x=config["method"])
+    output:
+        "outputs/STAR/all/pca-plot.eps"
+    shell:
+        "./bin/PCA.R {input} {output}"
