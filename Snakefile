@@ -7,7 +7,7 @@ rule all:
         expand("outputs/multiqc_report_trimmed/{filename}{num}_001_trimmed_multiqc_report.html", filename=[filename for method in config["method"].keys() for filename in config["method"][method]["files"]], num=config["num"]),
         expand("outputs/STAR/{filename}/Aligned.sortedByCoord.out.bam.bai", filename=[filename for method in config["method"].keys() for filename in config["method"][method]["files"]]),
         expand("outputs/STAR/{filename}/counts_2.txt", filename=[filename for method in config["method"].keys() for filename in config["method"][method]["files"]]),
-        [f"outputs/STAR/all/{x}/counts.txt" for x in config["method"]]
+        [f"outputs/STAR/all/{x}/vulcano-plot.eps" for x in config["method"]]
         
 rule raw_fastqc:
     input:
@@ -104,7 +104,6 @@ rule feature_counts:
         "featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out1} -s 1 {input.bam} && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.out2} -s 2 {input.bam}"
 
 
-
 rule feature_counts_per_sample:
     input:
         bam=lambda wildcards: [f"outputs/STAR/{name}/Aligned.sortedByCoord.out.sortedbyname.bam" for name in config["method"][wildcards.x]["files"]],
@@ -115,3 +114,12 @@ rule feature_counts_per_sample:
         outA="outputs/STAR/all/{x}/counts.txt"
     shell:
         "mkdir -p outputs/STAR/all/{wildcards.x}/ && featureCounts -p -t exon -g gene_id -a {input.gtf} -o {output.outA} -s {params.s} {input.bam}"
+
+rule de_analysis:
+    input:
+        counts = "outputs/STAR/all/{x}/counts.txt"
+    output:
+        plot="outputs/STAR/all/{x}/vulcano-plot.eps",
+        pval="outputs/STAR/all/{x}/DE.csv"
+    shell:
+        "./bin/DE.R -i {input.counts} -o {output.pval} -v {output.plot}"
