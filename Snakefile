@@ -3,6 +3,7 @@ configfile: "config.yaml"
 rule all:
     input:
         expand("outputs/multiqc_report_raw/{filename}{num}_001_multiqc_report.html", filename=[filename for method in config["method"].keys() for filename in config["method"][method]["files"]], num=config["num"]),
+        expand("outputs/trimmed_reads/{filename}2_001_trimmed.fastq", filename=[filename for method in config["method"].keys() for filename in config["method"][method]["files"]]),
         expand("outputs/multiqc_report_trimmed/{filename}{num}_001_trimmed_multiqc_report.html", filename=[filename for method in config["method"].keys() for filename in config["method"][method]["files"]], num=config["num"]),
         expand("outputs/STAR/{filename}/Aligned.sortedByCoord.out.bam.bai", filename=[filename for method in config["method"].keys() for filename in config["method"][method]["files"]]),
         expand("outputs/STAR/{filename}/counts_2.txt", filename=[filename for method in config["method"].keys() for filename in config["method"][method]["files"]]),
@@ -28,12 +29,14 @@ rule raw_multiqc:
 
 rule trim_bbduk:
     input:
-        read="data/samples/{filename}{num}_001.fastq",
+        read1="data/samples/{filename}1_001.fastq",
+        read2="data/samples/{filename}2_001.fastq",
         adapters="data/adapters.fa"
     output:
-        out="outputs/trimmed_reads/{filename}{num}_001_trimmed.fastq"
+        out1="outputs/trimmed_reads/{filename}1_001_trimmed.fastq",
+        out2="outputs/trimmed_reads/{filename}2_001_trimmed.fastq"
     shell:
-        "./bin/bbmap/bbduk.sh in={input.read} out={output.out} ref={input.adapters} ktrim=r k=23 mink=11 hdist=1 tpe tbo qtrim=r trimq=10"
+        "./bin/bbmap/bbduk.sh -Xmx2g in1={input.read1} in2={input.read2} out1={output.out1} out2={output.out2} ref={input.adapters} ktrim=r k=23 mink=11 hdist=1 tpe tbo qtrim=r trimq=10"
 
         
 rule trimmed_fastqc:
