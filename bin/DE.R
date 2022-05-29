@@ -75,7 +75,8 @@ dds = dds[keep,]
 
 dds$condition = factor(dds$condition, levels = c("normal","cancerous"))
 dds = DESeq(dds)
-res = results(dds)
+res = results(dds, tidy=TRUE)
+write.csv(res,options$options$de_filename, row.names = TRUE)
 
 # Shrinkage of effect size (LFC estimates) is useful for visualization and 
 # ranking of genes. We provide the dds object and the name or number of the 
@@ -91,8 +92,8 @@ summary(resLFC)
 # DE_genes_with_Padj_values = subset(res, select = c("padj") )
 # DE_genes_with_Padj_values
 resLFC = resLFC[order(resLFC$padj),]
-
-write.csv(resLFC,options$options$de_filename, row.names = TRUE)
+name = gsub("\\.csv", "LFC.csv",options$options$de_filename )
+write.csv(resLFC,name, row.names = TRUE)
 
 #  --  Vulcanplot.
 colors = resLFC$log2FoldChange
