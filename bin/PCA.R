@@ -2,21 +2,6 @@
 
 args = commandArgs(trailingOnly=TRUE)
 
-library( "optparse" )
-
-parser <- OptionParser()
-
-parser <- add_option(parser, c( "-i", "--input1" ),  action = "store", 
-                     type="character", dest = "input1", 
-                     help = "Input file cts 1.")
-parser <- add_option(parser, c( "-j", "--input2" ),  action = "store", 
-                     type="character", dest = "input2", 
-                     help = "Input file cts 2.")
-parser <- add_option(parser, c( "-o", "--output" ), action = "store", 
-                     type="character", dest = "pca_filename", 
-                     help = "Filename of eps file for PCA plot.")
-options = parse_args(parser, positional_arguments = TRUE)
-
 cts1 = as.matrix(read.csv(args[1], header=TRUE, sep=",", row.names = "X"))
 
 cts2 = as.matrix(read.csv(args[2], header=TRUE, sep=",", row.names = "X"))
@@ -69,4 +54,6 @@ legend(1.3, 0.23, legend=c("Collibri-cancerous", "Collibri-normal", "KAPA-cancer
        col=c("red", "black", "red", "black"), pch=c(16,16,17,17), cex=1)
 
 dev.off()
+
+
 
