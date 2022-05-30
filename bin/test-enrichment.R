@@ -28,7 +28,6 @@ res = transform(res, row = as.character(row))
 og_row_names = res$row
 edited_row_names = gsub("\\.[0-9]+$", "",og_row_names)
 res$row = edited_row_names
-
 # Find entrezid ids based on ensembl ids
 
 

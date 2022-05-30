@@ -130,7 +130,7 @@ rule de_analysis:
 
 rule reactome_p:
     input:
-        "outputs/STAR/all/{x}/res.csv"
+        "outputs/STAR/all/{x}/resLFC.csv"
     output:
         "outputs/STAR/all/{x}/reactome-pathways.eps"
     shell:

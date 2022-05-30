@@ -92,6 +92,7 @@ summary(resLFC)
 # DE_genes_with_Padj_values = subset(res, select = c("padj") )
 # DE_genes_with_Padj_values
 resLFC = resLFC[order(resLFC$padj),]
+resLFC$row = rownames(resLFC)
 name = gsub("\\.csv", "LFC.csv",options$options$de_filename )
 write.csv(resLFC,name, row.names = TRUE)
 
